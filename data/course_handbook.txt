@@ -1,0 +1,8 @@
+COMP10001 Foundations of Computing
+This subject provides a fast-paced introduction to programming and computer science. Students develop algorithmic and problem-solving skills and learn to design, implement, and test their own small- to medium-sized programs. The subject introduces the core computer science topics of abstraction, algorithms, and data structures. Topics covered include fundamental programming constructs, data types, and control flow. No prior programming experience is assumed.
+
+COMP20008 Elements of Data Processing
+This subject introduces the concepts and techniques of data processing, with a focus on the data science pipeline. Students will learn about data acquisition, cleaning, and integration. Topics include relational databases and the SQL query language, as well as semi-structured data formats like XML and JSON. Students will use scripting languages such as Python to manipulate and analyse data.
+
+COMP30027 Machine Learning
+This subject provides a detailed introduction to the theory and practice of machine learning. Topics include supervised learning (classification, regression), unsupervised learning (clustering, dimensionality reduction), and reinforcement learning. Students will learn about a range of machine learning algorithms, such as linear models, decision trees, and neural networks. They will also learn how to evaluate the performance of machine learning models and how to apply them to real-world problems.
