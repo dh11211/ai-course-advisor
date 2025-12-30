@@ -14,10 +14,8 @@ loader = TextLoader("data/course_handbook.txt")
 documents = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 chunks = text_splitter.split_documents(documents)
-print(f"Document split into {len(chunks)} chunks.")
 
 # --- 2. Create Embeddings and Upload to Pinecone ---
-print("Creating embeddings and uploading to Pinecone...")
 # Get the OpenAI embeddings model
 embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
 
@@ -35,6 +33,4 @@ PineconeVectorStore.from_documents(
     index_name=index_name
 )
 
-print("---")
-print("✅ Ingestion complete!")
-print(f"Data has been uploaded to the '{index_name}' index in Pinecone.")
+print(f"✅ Ingestion complete! Data uploaded to index: {index_name}")
