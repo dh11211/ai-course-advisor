@@ -1,43 +1,79 @@
-AI Course Advisor (RAG Agent)
+# UniMelb AI Course Advisor (Reflexive RAG Agent)
 
-A Retrieval-Augmented Generation (RAG) agent designed to assist University of Melbourne students with complex course planning queries. It parses unstructured university handbook data into queryable vector embeddings to provide accurate, context-aware responses regarding prerequisites and degree structures.
+An intelligent academic planning assistant that navigates complex degree prerequisites using a Reflexive Retrieval-Augmented Generation (RAG) architecture.
 
-Core Architecture
+## Context & Problem Statement
 
-Backend: Python (FastAPI/Flask), OpenAI API
+University handbooks are dense, and prerequisite chains (e.g., Calculus 2 -> Vector Calculus -> Real Analysis) are difficult to visualize mentally. Students often make planning errors that delay graduation due to overlooked constraints.
 
-Data Engineering: Vector Embeddings (FAISS/ChromaDB) for semantic search over handbook data.
+This project implements a Reflexive RAG Agent designed to:
+*   **Ingest unstructured handbook data.**
+*   **Retrieve relevant subject clauses** using semantic search (Qdrant).
+*   **Reflect on retrieval quality** to minimize hallucination.
+*   **Reason about logic chains** to validate study plans deterministically.
 
-Frontend: React (Vite)
+## Architecture
 
-Validation: Reflexive prompting layer to minimize hallucination rates and verify course codes against degree logic.
+The system follows a decoupled architecture separating the reasoning engine from the interface.
 
-Key Features
+```mermaid
+graph LR
+    A[User Query] --> B(React Frontend)
+    B --> C{FastAPI Backend}
+    C --> D[LangChain Orchestrator]
+    D --> E[(Qdrant Vector DB)]
+    E --> D
+    D --> F[LLM Reasoning Core]
+    F --> C
+    C --> B
+```
 
-Handbook Parsing: Ingests raw text/PDF data from the university handbook (data/course_handbook.txt) and chunks it for vector storage.
+*   **Ingestion Pipeline (`ingest.py`):** Specialized pre-processing of handbook text chunks to maximize retrieval density.
+*   **Vector Store:** Qdrant used for high-speed similarity search.
+*   **Reflexive Loop:** The LLM evaluates its own retrieved context before generating an answer. If context is insufficient, it signals uncertainty rather than fabricating prerequisites.
 
-Semantic Retrieval: Uses cosine similarity to find relevant course rules before generating an answer.
+## Tech Stack
 
-Hallucination Mitigation: Implements a "reflexive" step where the model cross-references its generated answer with the retrieved context before displaying it to the user.
+*   **Backend:** Python, FastAPI, Uvicorn
+*   **AI/ML:** LangChain, OpenAI API (GPT-4o), Qdrant (Vector Store)
+*   **Frontend:** React.js, Vite, TailwindCSS
+*   **DevOps:** Docker (planned), Git
 
-Setup & Installation
+## Setup & Execution
 
-Backend
+**Prerequisites:** Python 3.10+, Node.js 18+, OpenAI API Key.
 
+### 1. Backend Setup
+
+```bash
 cd backend
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
-python main.py
 
+# Configure Environment
+echo "OPENAI_API_KEY=your_key_here" > .env
 
-Frontend
+# Run Ingestion (First time only)
+python ../ingest.py
 
+# Start Server
+uvicorn main:app --reload
+```
+
+### 2. Frontend Setup
+
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
+## Future Roadmap
 
-Status
+*   **GraphRAG Implementation:** Migrating from vector-only retrieval to a Knowledge Graph (Neo4j) to explicitly model cyclic prerequisites.
+*   **Multi-Turn Memory:** Enhancing chat history management for complex, multi-semester planning sessions.
 
-Current Phase: MVP (Minimum Viable Product).
+## Author
 
-Next Steps: Integration of multi-year degree planning logic and user session persistence.
+**Zishan (Shannon) Chen**
